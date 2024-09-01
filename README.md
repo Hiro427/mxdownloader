@@ -2,14 +2,26 @@
 A command line tool, utilizing the mangadex.org api you can download single, list, range or all chapters of a given manga. 
 
 
+
 ## About 
-This is a a python cli tool that can dowload single, list, range or all chapters. The config file as of writing this (9/1/2024) can only set the path but I will add the ability to change langauge from default (en/english) to any supported langauge on mangadex via the cli. 
+This is a a python cli tool that can dowload single, list, range or all chapters. **_The config file as of writing this (9/1/2024) can only set the path_** but I will add the ability to change langauge from default (en/english) to any supported langauge on mangadex via the cli.
+
+### Compatability 
+Currently I've only tested on **Linux**, I expect it will work on MacOS aswell, but I will be testing it and updating this readme appropriately. 
+
+As for Windows I've only done  little testing, the main funcionality is there but I still have a few kinks to work out.
+
+This is my first _published_ project albeit a small one, if any of the more experienced devs who may come across this have any suggestions feel free to add it to the issues discussion. 
+
+Thank you in advance for your advice!
 
 ## Installation 
 
 ### Cloning the repo
-Run:
+Run: 
 `git clone https://github.com/JacobAR1/mxdownloader.git`
+
+
 
 
 ## Credits 
