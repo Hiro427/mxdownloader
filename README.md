@@ -34,7 +34,14 @@ Move the executable to your PATH
 
 
 ## Using the CLI 
+You need either the manga url or the chapter url,
+### To Download any chapter of any language: 
+![Screenshot from 2024-09-01 18-07-07](https://github.com/user-attachments/assets/da1aa90e-9ef2-4ef1-8a01-e8595a845ef7)
 
+### To Download any 2 Chapters as seen here we are downloading chapters 2 and 7 
+![Screenshot from 2024-09-01 17-47-17](https://github.com/user-attachments/assets/76334fa4-10db-4bfb-b60d-fae3d1484dcd)
+![Screenshot from 2024-09-01 17-46-25](https://github.com/user-attachments/assets/36d5e844-0fac-4f44-8558-8016c9f519ba)
+![Screenshot from 2024-09-01 17-45-20](https://github.com/user-attachments/assets/bcf7aeca-5c95-4037-86ca-4edbfbe627cd)
 
 
 
