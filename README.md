@@ -18,8 +18,8 @@ Run:
 
 _I couldn't find a reliable way to get all of the scanlation groups especially since this program allows downloading any chapter(s)._
 
-**_If a group's name is not in this thread or would like me to post there links on the wiki more directly please let me know via the Issues section._**
+**_If a group's name is not in this thread or would like me to post there links in the readme or in the wiki (not active atm, but I would make it for this) more directly please let me know via the Issues section._**
 
 **MangaDex API**: https://api.mangadex.org/docs/
 
-*Credits the devs at MangaDex for their work in making this api available to everyone. I did not intend on making this script public as it isn't an extremely complex set up. 
+_Credits the devs at MangaDex for their work in making this api available to everyone. I did not intend on making this script public as it isn't an extremely complex set up._
