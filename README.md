@@ -19,7 +19,23 @@ Thank you in advance for your advice!
 
 ### Cloning the repo
 Run: 
-`git clone https://github.com/JacobAR1/mxdownloader.git`
+`git clone https://github.com/JacobAR1/mxdownloader.git /path/to/directory`
+
+Create a Python Virtual Environment 
+`python -m venv .venv`
+
+Install the requirements 
+`pip install -r requirements.txt`
+
+Create the executable
+`pyinstaller --onefile mxdownloader.py`
+
+Move the executable to your PATH
+`cd dist`
+`sudo mv ./mxdownloader /usr/local/bin/`
+
+
+## Using the CLI 
 
 
 
