@@ -1,0 +1,7 @@
+dist/
+
+build/
+
+.venv/
+
+mangadex_cli.spec 

@@ -1,0 +1,13 @@
+altgraph==0.17.4
+certifi==2024.8.30
+charset-normalizer==3.3.2
+configparser==7.1.0
+idna==3.8
+packaging==24.1
+pyinstaller==6.10.0
+pyinstaller-hooks-contrib==2024.8
+ratelimit==2.2.1
+requests==2.32.3
+setuptools==74.0.0
+tqdm==4.66.5
+urllib3==2.2.2
