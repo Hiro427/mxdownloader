@@ -16,8 +16,6 @@ This is my first _published_ project albeit a small one, if any of the more expe
 Thank you in advance for your advice!
 
 ## Installation 
-
-### Cloning the repo
 Run: 
 `git clone https://github.com/JacobAR1/mxdownloader.git /path/to/directory`
 
