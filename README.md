@@ -13,12 +13,13 @@ Run:
 
 
 ## Credits 
-**Scanlation Groups** : https://www.reddit.com/r/mangadex/comments/mafhtl/scanlation_sites_megathread/
+**Scanlation Groups**: https://www.reddit.com/r/mangadex/comments/mafhtl/scanlation_sites_megathread/
 
 
-*I couldn't find a reliable way to get all of the scanlation groups especially since this program allows downloading any chapter(s). 
+_I couldn't find a reliable way to get all of the scanlation groups especially since this program allows downloading any chapter(s).
 
 If a group's name is not in this thread or would like me to post there links on the wiki more directly please let me know via the Issues section. 
 
-MangaDex API: https://api.mangadex.org/docs/
+**MangaDex API**: https://api.mangadex.org/docs/
+
 *Credits the devs at MangaDex for their work in making this api available to everyone. I did not intend on making this script public as it isn't an extremely complex set up. 
