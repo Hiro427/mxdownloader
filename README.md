@@ -13,7 +13,7 @@ Run:
 
 
 ## Credits 
-Scanlation Groups: https://www.reddit.com/r/mangadex/comments/mafhtl/scanlation_sites_megathread/
+**Scanlation Groups** : https://www.reddit.com/r/mangadex/comments/mafhtl/scanlation_sites_megathread/
 
 
 *I couldn't find a reliable way to get all of the scanlation groups especially since this program allows downloading any chapter(s). 
