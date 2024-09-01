@@ -143,7 +143,9 @@ def download_multiple_chapter(chapter_id):
             manga_title = manga_data['attributes']['title'].get('en', manga_title)
             break
 
-    base_dir = os.path.expanduser("~/Downloads/Manga")
+
+    config_dir = config.get("settings", "path", fallback="~/Downloads/Manga")
+    base_dir = os.path.expanduser(config_file)
     manga_dir = os.path.join(base_dir, manga_title)
     chapter_dir = os.path.join(manga_dir, f"Chapter {chapter_no} - {chapter_title}")
     if not os.path.exists(chapter_dir):
