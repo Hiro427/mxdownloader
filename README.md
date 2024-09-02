@@ -36,6 +36,13 @@ Move the executable to your PATH
 
 
 ## Using the CLI 
+
+### Config File 
+
+The location of the config file is hard coded by default to be ~/config/mxcli/config.ini, you can change this in the .py file is you wish, you can then create the file yourself to change the default download path.
+
+This is not necessary as the script will default to ~/Downloads/Manga 
+
 You need either the manga url or the chapter url,
 #### To Download any chapter of any language: 
 ![Screenshot from 2024-09-01 18-07-07](https://github.com/user-attachments/assets/da1aa90e-9ef2-4ef1-8a01-e8595a845ef7)
