@@ -17,6 +17,7 @@ This is my first _published_ project albeit a small one, if any of the more expe
 
 Thank you in advance for your advice!
 
+
 ## Installation 
 
 #### Note: Creating the virtual environment is not necessary, you can just pip3/pip install -r requirements .txt and make the exe with pyinstaller, I'll leave that up to you. 
