@@ -67,7 +67,7 @@ You need either the manga url or the chapter url,
 **Scanlation Groups**: https://www.reddit.com/r/mangadex/comments/mafhtl/scanlation_sites_megathread/
 
 
-_I couldn't find a reliable way to get all of the scanlation groups especially since this program allows downloading any chapter(s)._
+_I couldn't find a reliable way to get all of the scanlation groups, since this program allows downloading any chapter(s) I wanted to give credit to as many groups as possible._
 
 **_If a group's name is not in this thread or would like me to post there links in the readme or in the wiki (not active atm, but I would make it for this) more directly please let me know via the Issues section._**
 
