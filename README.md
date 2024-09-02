@@ -25,7 +25,7 @@ Thank you in advance for your advice!
 #### Similarly you dont need to use pyinstaller, you can just run python/python3 mxdownloader.py followed by the arguments. 
 
 Run: 
-`git clone https://github.com/JacobAR1/mxdownloader.git /path/to/directory`
+`https://github.com/Hiro427/mxdownloader.git /path/to/directory`
 
 Create a Python Virtual Environment 
 `python -m venv .venv`
