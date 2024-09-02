@@ -19,9 +19,9 @@ Thank you in advance for your advice!
 
 ## Installation 
 
-### Note: Creating the virtual environment is not necessary, you can just pip3/pip install -r requirements .txt and make the exe with pyinstaller, I'll leave that up to you. 
+#### Note: Creating the virtual environment is not necessary, you can just pip3/pip install -r requirements .txt and make the exe with pyinstaller, I'll leave that up to you. 
 
-### Similarly you dont need to use pyinstaller, you can just run python/python3 mxdownloader.py followed by the arguments. 
+#### Similarly you dont need to use pyinstaller, you can just run python/python3 mxdownloader.py followed by the arguments. 
 
 Run: 
 `git clone https://github.com/JacobAR1/mxdownloader.git /path/to/directory`
