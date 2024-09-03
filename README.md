@@ -26,6 +26,7 @@ Thank you in advance for your advice!
 
 Run: 
 `git clone https://github.com/Hiro427/mxdownloader.git /path/to/directory` #Linux/MacOS
+
 `git clone -b windows --single-branch https://github.com/Hiro427/mxdownloader.git` #Windows
 
 Create a Python Virtual Environment 
