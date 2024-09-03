@@ -52,6 +52,11 @@ The location of the config file is hard coded by default to be ~/config/mxcli/co
 
 This is not necessary as the script will default to ~/Downloads/Manga 
 
+Example Config File:
+
+![Screenshot from 2024-09-03 13-38-51](https://github.com/user-attachments/assets/db71125f-77eb-48e5-9826-18d92bd105c9)
+
+
 You need either the manga url or the chapter url,
 #### To Download any chapter of any language: 
 ![Screenshot from 2024-09-01 18-07-07](https://github.com/user-attachments/assets/da1aa90e-9ef2-4ef1-8a01-e8595a845ef7)
