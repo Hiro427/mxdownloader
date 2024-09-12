@@ -71,4 +71,4 @@ _I couldn't find a reliable way to get all of the scanlation groups, since this 
 
 **MangaDex API**: https://api.mangadex.org/docs/
 
-_Credits the devs at MangaDex for their work in making this api available to everyone. I did not intend on making this script public as it isn't an extremely complex set up._
+_Credits the devs at MangaDex for their work in making this api available to everyone._
