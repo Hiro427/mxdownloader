@@ -2,7 +2,7 @@
 A command line tool, utilizing the mangadex.org api you can download single, list, range or all chapters of a given manga. 
 
 ### Compatability 
-Currently I've only tested on **Linux**, I expect it will work on MacOS aswell, but I will be testing it and updating this readme appropriately. 
+I've mainly tested on **Linux**, I expect it will work on MacOS aswell, but I will be testing it and updating this readme appropriately. 
 
 As for Windows I've only done  little testing, the main funcionality is there but I still have a few kinks to work out.
 
