@@ -6,10 +6,6 @@ Currently I've only tested on **Linux**, I expect it will work on MacOS aswell, 
 
 As for Windows I've only done  little testing, the main funcionality is there but I still have a few kinks to work out.
 
-This is my first _published_ project albeit a small one, if any of the more experienced devs who may come across this have any suggestions feel free to add it to the issues discussion. 
-
-Thank you in advance for your advice!
-
 
 ## Installation 
 
