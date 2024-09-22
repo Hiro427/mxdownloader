@@ -7,6 +7,8 @@ from tqdm import tqdm
 import re
 from ratelimit import limits, sleep_and_retry
 from configparser import ConfigParser
+from inq_cli import main as interactive_main 
+
 
 ONE_SECOND = 1
 
@@ -199,44 +201,49 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    if args.set_path:
-        updated_path = args.set_path
-        config.set("settings", "path", updated_path)
-        read_path = config["settings"]["path"]
-        with open(config_file, 'w') as configFile:
-            config.write(configFile)
-        print(f"Path set to: {read_path}")
-        sys.exit(0)
+    if len(sys.argv) == 1:
+        interactive_main()
 
-    if not args.url:
-        print("url is required")
-        sys.exit(0)
+    else: 
 
-    id_from_url, url_type = extract_id_from_url(args.url)
-    manga_title = get_manga_title_from_url(args.url)
+        if args.set_path:
+            updated_path = args.set_path
+            config.set("settings", "path", updated_path)
+            read_path = config["settings"]["path"]
+            with open(config_file, 'w') as configFile:
+                config.write(configFile)
+            print(f"Path set to: {read_path}")
+            sys.exit(0)
+
+        if not args.url:
+            print("url is required")
+            sys.exit(0)
+
+        id_from_url, url_type = extract_id_from_url(args.url)
+        manga_title = get_manga_title_from_url(args.url)
 
 
-    if url_type == 'chapter':
-        print(f"Downloading chapter for {manga_title}")
-        download_single_chapter(id_from_url)
-        print(f"Download Complete: Chapter for {manga_title}")
-    elif url_type == 'manga':
-        if args.download_all:
-            print(f"Downloading all chapters for {manga_title}")
-            download_all_chapters(id_from_url)
-            print(f"Download complete: All chapters for {manga_title}")
-        elif args.chapters:
-            print(f"Downloading chapters: {args.chapters}, for {manga_title}")
-            download_specific_chapters(id_from_url, args.chapters)
-            print(f"Download complete: Chapters {args.chapters} for {manga_title}")
-        elif args.range:
-            start_chapter, end_chapter = args.range
-            print(f"Downloading chapters {start_chapter} to {end_chapter} for {manga_title}")
-            download_chapter_range(id_from_url, start_chapter, end_chapter)
-            print(f"Download complete: Chapter {start_chapter} to {end_chapter} of {manga_title}")
+        if url_type == 'chapter':
+            print(f"Downloading chapter for {manga_title}")
+            download_single_chapter(id_from_url)
+            print(f"Download Complete: Chapter for {manga_title}")
+        elif url_type == 'manga':
+            if args.download_all:
+                print(f"Downloading all chapters for {manga_title}")
+                download_all_chapters(id_from_url)
+                print(f"Download complete: All chapters for {manga_title}")
+            elif args.chapters:
+                print(f"Downloading chapters: {args.chapters}, for {manga_title}")
+                download_specific_chapters(id_from_url, args.chapters)
+                print(f"Download complete: Chapters {args.chapters} for {manga_title}")
+            elif args.range:
+                start_chapter, end_chapter = args.range
+                print(f"Downloading chapters {start_chapter} to {end_chapter} for {manga_title}")
+                download_chapter_range(id_from_url, start_chapter, end_chapter)
+                print(f"Download complete: Chapter {start_chapter} to {end_chapter} of {manga_title}")
+            else:
+                print("No chapters specified. Please use --chapters to specify chapter numbers or --download-all to download all chapters.")
+
+
         else:
-            print("No chapters specified. Please use --chapters to specify chapter numbers or --download-all to download all chapters.")
-
-
-    else:
-        print("Invalid URL. Please provide a valid MangaDex chapter or manga URL.")
+            print("Invalid URL. Please provide a valid MangaDex chapter or manga URL.")
