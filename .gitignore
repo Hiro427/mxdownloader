@@ -1,10 +1,9 @@
-dist/
-
 build/
+
+dist/ 
+
+mdx.spec 
 
 .venv/
 
-__pycache__
-
-
-mxdownloader.spec 
+__pycache__/
