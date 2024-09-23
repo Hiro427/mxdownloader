@@ -113,7 +113,7 @@ def download_single_chapter(chapter_id):
     chapter_url = f"https://api.mangadex.org/chapter/{chapter_id}"
     chapter_data = requests.get(chapter_url).json()['data']
     chapter_no = chapter_data['attributes']['chapter']
-    # chapter_title = chapter_data['attributes']['title']
+    chapter_title = chapter_data['attributes']['title']
 
     at_home_url = f"https://api.mangadex.org/at-home/server/{chapter_id}"
     image_data = requests.get(at_home_url).json()
@@ -132,13 +132,16 @@ def download_single_chapter(chapter_id):
     config_dir = config.get("settings", "path", fallback="~/Downloads/Manga")
     base_dir = os.path.expanduser(config_dir)
     manga_dir = os.path.join(base_dir, manga_title)
-    chapter_dir = os.path.join(manga_dir, f"Chapter_{chapter_no}")
+    if chapter_title == None:
+        chapter_dir = os.path.join(manga_dir, f"Ch. {chapter_no}")
+    else:
+        chapter_dir = os.path.join(manga_dir, f"Ch. {chapter_no}: {chapter_title}")
     if not os.path.exists(chapter_dir):
         os.makedirs(chapter_dir)
 
     for i, image in enumerate(tqdm(images, desc=f"Downloading Chapter {chapter_no}")):
         image_url = f"{base_url}/data/{chapter_hash}/{image}"
-        image_path = os.path.join(chapter_dir, f"Page {i + 1}.jpg")
+        image_path = os.path.join(chapter_dir, f"{i + 1}.jpg")
         img_response = requests.get(image_url)
         with open(image_path, 'wb') as file:
             file.write(img_response.content)
@@ -150,7 +153,7 @@ def download_multiple_chapter(chapter_id):
     chapter_url = f"https://api.mangadex.org/chapter/{chapter_id}"
     chapter_data = requests.get(chapter_url).json()['data']
     chapter_no = chapter_data['attributes']['chapter']
-    # chapter_title = chapter_data['attributes']['title']
+    chapter_title = chapter_data['attributes']['title']
 
     at_home_url = f"https://api.mangadex.org/at-home/server/{chapter_id}"
     image_data = requests.get(at_home_url).json()
@@ -170,13 +173,16 @@ def download_multiple_chapter(chapter_id):
     config_dir = config.get("settings", "path", fallback="~/Downloads/Manga")
     base_dir = os.path.expanduser(config_dir)
     manga_dir = os.path.join(base_dir, manga_title)
-    chapter_dir = os.path.join(manga_dir, f"Chapter_{chapter_no}")
+    if chapter_title == None:
+        chapter_dir = os.path.join(manga_dir, f"Ch. {chapter_no}")
+    else:
+        chapter_dir = os.path.join(manga_dir, f"Ch. {chapter_no}: {chapter_title}")
     if not os.path.exists(chapter_dir):
         os.makedirs(chapter_dir)
 
     for i, image in enumerate(images):
         image_url = f"{base_url}/data/{chapter_hash}/{image}"
-        image_path = os.path.join(chapter_dir, f"Page {i + 1}.jpg")
+        image_path = os.path.join(chapter_dir, f"{i + 1}.jpg")
         img_response = requests.get(image_url)
         with open(image_path, 'wb') as file:
             file.write(img_response.content)
@@ -228,7 +234,7 @@ def list_available_chapters(manga_id):
     # Extract the chapter number and title from the chapter data, and store both ID and chapter number
     chapter_choices = [
         {
-            "name": f"Chapter {chap['attributes']['chapter']} - {chap['attributes']['title']}",
+            "name": f"Ch. {chap['attributes']['chapter']}: {chap['attributes']['title']}",
             "value": chap['id'],
             "chapter_number": chap['attributes']['chapter']  # Add chapter number for easier tracking
         }
