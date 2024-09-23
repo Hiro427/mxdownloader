@@ -5,10 +5,10 @@ import re
 from urllib.parse import urlparse
 from tqdm import tqdm
 from ratelimit import limits, sleep_and_retry
-import sys 
 from configparser import ConfigParser
 from InquirerPy.base.control import Choice
 from InquirerPy.prompts.fuzzy import FuzzyPrompt 
+import click 
 
 ONE_SECOND = 1
 
@@ -46,6 +46,30 @@ def extract_id_from_url(url):
 def normalize_chapter_number(chapter_str):
     match = re.match(r'^(\d+\.?\d*)', chapter_str)
     return float(match.group(1)) if match else None
+
+
+def download_chapter_range(manga_id):
+    start_chapter = click.prompt("Enter the starting chapter number")
+    end_chapter = click.prompt("Enter the ending chapter number")
+
+    # Convert input to float to handle decimal chapter numbers correctly
+    start_chapter_num = float(start_chapter)
+    end_chapter_num = float(end_chapter)
+
+    # Fetch all the chapters
+    chapters = get_all_chapters(manga_id)
+
+    # Filter chapters that fall within the specified range
+    chapters_in_range = [
+        chap for chap in chapters
+        if chap['attributes']['chapter'] is not None  # Ensure the chapter number exists
+        and start_chapter_num <= float(chap['attributes']['chapter']) <= end_chapter_num
+    ]
+
+    # Download each chapter in the range
+    for chap in chapters_in_range:
+        # print(f"Downloading Chapter {chap['attributes']['chapter']} - {chap['attributes']['title']}")
+        download_single_chapter(chap['id'])
 
 
 @sleep_and_retry
@@ -89,7 +113,7 @@ def download_single_chapter(chapter_id):
     chapter_url = f"https://api.mangadex.org/chapter/{chapter_id}"
     chapter_data = requests.get(chapter_url).json()['data']
     chapter_no = chapter_data['attributes']['chapter']
-    chapter_title = chapter_data['attributes']['title']
+    # chapter_title = chapter_data['attributes']['title']
 
     at_home_url = f"https://api.mangadex.org/at-home/server/{chapter_id}"
     image_data = requests.get(at_home_url).json()
@@ -108,7 +132,7 @@ def download_single_chapter(chapter_id):
     config_dir = config.get("settings", "path", fallback="~/Downloads/Manga")
     base_dir = os.path.expanduser(config_dir)
     manga_dir = os.path.join(base_dir, manga_title)
-    chapter_dir = os.path.join(manga_dir, f"Chapter {chapter_no} - {chapter_title}")
+    chapter_dir = os.path.join(manga_dir, f"Chapter_{chapter_no}")
     if not os.path.exists(chapter_dir):
         os.makedirs(chapter_dir)
 
@@ -126,7 +150,7 @@ def download_multiple_chapter(chapter_id):
     chapter_url = f"https://api.mangadex.org/chapter/{chapter_id}"
     chapter_data = requests.get(chapter_url).json()['data']
     chapter_no = chapter_data['attributes']['chapter']
-    chapter_title = chapter_data['attributes']['title']
+    # chapter_title = chapter_data['attributes']['title']
 
     at_home_url = f"https://api.mangadex.org/at-home/server/{chapter_id}"
     image_data = requests.get(at_home_url).json()
@@ -146,7 +170,7 @@ def download_multiple_chapter(chapter_id):
     config_dir = config.get("settings", "path", fallback="~/Downloads/Manga")
     base_dir = os.path.expanduser(config_dir)
     manga_dir = os.path.join(base_dir, manga_title)
-    chapter_dir = os.path.join(manga_dir, f"Chapter {chapter_no} - {chapter_title}")
+    chapter_dir = os.path.join(manga_dir, f"Chapter_{chapter_no}")
     if not os.path.exists(chapter_dir):
         os.makedirs(chapter_dir)
 
@@ -162,6 +186,15 @@ def download_all_chapters(manga_id):
     all_chapters = get_all_chapters(manga_id)
     for chapter in (tqdm(all_chapters, desc="Downloading Chapter(s)")):
         download_multiple_chapter(chapter['id'])
+
+def download_specific_chapters(manga_id, chapter_numbers):
+    all_chapters = get_all_chapters(manga_id)
+    for chapter in all_chapters:
+        if chapter['attributes']['chapter'] in chapter_numbers and chapter['attributes']['translatedLanguage'] == 'en':
+            download_single_chapter(chapter['id'])
+
+
+
 
 def download_specific_range(manga_id):
     # Prompt the user to enter start and end chapter numbers
@@ -202,7 +235,6 @@ def list_available_chapters(manga_id):
         for chap in chapters
     ]
 
-    # Initialize a list to store selected chapters
     selected_chapters = []
 
     while True:
@@ -213,7 +245,6 @@ def list_available_chapters(manga_id):
         choices_to_display.insert(0, {'name': 'Continue to download selected chapters', 'value': 'continue'})
         choices_to_display.insert(0, {'name': 'Go Back', 'value': 'go_back'})
 
-        # Use FuzzyPrompt for searching through chapters
         prompt = FuzzyPrompt(
             message="Search or select chapters to add (type to search):",
             choices=choices_to_display,
@@ -235,13 +266,10 @@ def list_available_chapters(manga_id):
             print("Going back to the previous menu...")
             return  # Go back to the previous menu
 
-        # Otherwise, store the selected chapter and remove it from the list
         selected_chapters.append(chosen_chapter)
 
-        # Display selected chapters so far with their chapter numbers
         display_selected_chapters(selected_chapters, chapter_choices)
 
-    # Download all selected chapters after the loop ends
     for chapter_id in selected_chapters:
         download_single_chapter(chapter_id)
 
@@ -253,7 +281,6 @@ def display_selected_chapters(selected_chapters, chapter_choices):
     ]
     print(f"Selected chapters so far: {selected_numbers}")
 
-# Function to handle download options (all, range, single)
 def handle_download_options(manga_id):
     while True:
         options = inquirer.select(
