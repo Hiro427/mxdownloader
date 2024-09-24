@@ -28,6 +28,8 @@ Install the requirements
 
 `pip or pip3 install -r requirements.txt`
 
+`pip or pip3 install pyinstaller`
+
 Create the executable
 
 `pyinstaller --onefile mdx.py`
