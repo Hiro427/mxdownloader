@@ -38,7 +38,7 @@ Move the executable to your PATH
 
 `cd dist` #This is where the exe created by pyinstaller should be.
 
-`sudo mv ./mxdownloader /usr/local/bin/` 
+`sudo mv ./mdx /usr/local/bin/` 
 
 #This should add it to your PATH if you are on MacOS or Linux allowing you to use the cli outside of the project folder. I am not sure how this is done for Windows. 
 
