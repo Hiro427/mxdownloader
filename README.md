@@ -14,31 +14,30 @@ Mac: Error msg may appear during the download process but the download should go
 You will need to have python installed.
 
 
-## Clone repo: 
+### Clone repo: 
 
-### Linux/MacOS
+#### Linux/MacOS
 
 `git clone https://github.com/Hiro427/mxdownloader.git /path/to/directory`
 
-### Windows
-
+#### Windows
 `git clone -b windows --single-branch https://github.com/Hiro427/mxdownloader.git` 
 
-Navigate to the project directory 
+#### Navigate to the project directory 
 
 `cd path/to/project` 
 
-Install the requirements
+#### Install the requirements
 
 `pip or pip3 install -r requirements.txt`
 
 `pip or pip3 install pyinstaller`
 
-Create the executable
+#### Create the executable
 
 `pyinstaller --onefile mdx.py`
 
-Move the executable to your PATH
+#### Move the executable to your PATH
 
 `cd dist` #This is where the exe created by pyinstaller should be.
 
