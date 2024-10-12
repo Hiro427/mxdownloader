@@ -14,11 +14,15 @@ Mac: Error msg may appear during the download process but the download should go
 You will need to have python installed.
 
 
-Clone repo: 
+## Clone repo: 
 
-`git clone https://github.com/Hiro427/mxdownloader.git /path/to/directory` #Linux/MacOS
+### Linux/MacOS
 
-`git clone -b windows --single-branch https://github.com/Hiro427/mxdownloader.git` #Windows
+`git clone https://github.com/Hiro427/mxdownloader.git /path/to/directory`
+
+### Windows
+
+`git clone -b windows --single-branch https://github.com/Hiro427/mxdownloader.git` 
 
 Navigate to the project directory 
 
