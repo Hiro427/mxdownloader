@@ -77,7 +77,7 @@ Vim Keys CANNOT be used when selecting multiple in the list view as the keystrok
 
 #### Download Selected Chapters
 
-As I said above VIM keys CANNOT be used here as the program will register them as part of the search. In this menu you will need to use up or down arrows to navigate in addition to the fuzzy finger. 
+As I said above VIM keys CANNOT be used here as the program will register them as part of the search. In this menu you will need to use up or down arrows to navigate in addition to the fuzzy finder. 
 
 You can type the chapter title or number, pressing enter adds that chapter to the list of the ones you wish to download.
 
