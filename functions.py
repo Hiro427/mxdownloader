@@ -143,7 +143,7 @@ def download_single_chapter(chapter_id):
     if not os.path.exists(manga_dir):
         os.makedirs(manga_dir)
 
-    if chapter_title == "":
+    if not chapter_title:  # This checks for None, empty string, or other falsy values
         cbz_path = os.path.join(manga_dir, f"Ch.{chapter_no}.cbz")
     else:
         chapter_title = chapter_title.replace("/", "-")
@@ -192,7 +192,7 @@ def download_multiple_chapter(chapter_id):
     if not os.path.exists(manga_dir):
         os.makedirs(manga_dir)
 
-    if chapter_title == "":
+    if not chapter_title:  # This checks for None, empty string, or other falsy values
         cbz_path = os.path.join(manga_dir, f"Ch.{chapter_no}.cbz")
     else:
         chapter_title = chapter_title.replace("/", "-")
