@@ -1,17 +1,17 @@
 import requests
 from InquirerPy import inquirer
-import os 
-import re 
+import os
+import re
+import zipfile
 from urllib.parse import urlparse
 from tqdm import tqdm
 from ratelimit import limits, sleep_and_retry
 from configparser import ConfigParser
 from InquirerPy.base.control import Choice
-from InquirerPy.prompts.fuzzy import FuzzyPrompt 
-import click 
+from InquirerPy.prompts.fuzzy import FuzzyPrompt
+import click
 
 ONE_SECOND = 1
-
 
 config = ConfigParser()
 config_file = os.path.expanduser("~/.config/mxcli/config.ini")
@@ -27,12 +27,15 @@ def search_manga(title):
         for manga in data['data']:
             # Add manga title and ID as choices for the prompt
             results.append({
-                'name': manga['attributes']['title']['en'],  # Manga title (you can format this as needed)
-                'value': manga['id']  # The ID will be stored for retrieval after selection
+                'name': manga['attributes']['title']
+                ['en'],  # Manga title (you can format this as needed)
+                'value': manga[
+                    'id']  # The ID will be stored for retrieval after selection
             })
         return results
     else:
         return []
+
 
 def extract_id_from_url(url):
     parsed = urlparse(url)
@@ -40,7 +43,6 @@ def extract_id_from_url(url):
     if "title" in path_parts:
         return path_parts[-2]  # Extract and return the manga ID
     return None
-
 
 
 def normalize_chapter_number(chapter_str):
@@ -61,9 +63,10 @@ def download_chapter_range(manga_id):
 
     # Filter chapters that fall within the specified range
     chapters_in_range = [
-        chap for chap in chapters
-        if chap['attributes']['chapter'] is not None  # Ensure the chapter number exists
-        and start_chapter_num <= float(chap['attributes']['chapter']) <= end_chapter_num
+        chap for chap in chapters if chap['attributes']['chapter'] is
+        not None  # Ensure the chapter number exists
+        and start_chapter_num <= float(chap['attributes']
+                                       ['chapter']) <= end_chapter_num
     ]
 
     # Download each chapter in the range
@@ -94,7 +97,8 @@ def get_all_chapters(manga_id):
         for chapter in chapters:
             chapter_id = chapter['id']
             if chapter_id in processed_chapter_ids:
-                print(f"Duplicate chapter ID {chapter_id} detected and skipped.")
+                print(
+                    f"Duplicate chapter ID {chapter_id} detected and skipped.")
                 continue
             processed_chapter_ids.add(chapter_id)
             all_chapters.append(chapter)
@@ -121,30 +125,39 @@ def download_single_chapter(chapter_id):
     chapter_hash = image_data['chapter']['hash']
     images = image_data['chapter']['data']
 
-    manga_title = "Unknown Manga"
+    manga_title = "Unknown Manga"  # Fallback title
     for relation in chapter_data['relationships']:
         if relation['type'] == 'manga':
             manga_id = relation['id']
-            manga_data = requests.get(f"https://api.mangadex.org/manga/{manga_id}").json()['data']
-            manga_title = manga_data['attributes']['title'].get('en', manga_title)
+            manga_data = requests.get(
+                f"https://api.mangadex.org/manga/{manga_id}").json()['data']
+            manga_title = manga_data['attributes']['title'].get(
+                'en', manga_title)
             break
 
+    # Config and CBZ output path
     config_dir = config.get("settings", "path", fallback="~/Downloads/Manga")
     base_dir = os.path.expanduser(config_dir)
     manga_dir = os.path.join(base_dir, manga_title)
-    if chapter_title == None:
-        chapter_dir = os.path.join(manga_dir, f"Ch. {chapter_no}")
-    else:
-        chapter_dir = os.path.join(manga_dir, f"Ch. {chapter_no}: {chapter_title}")
-    if not os.path.exists(chapter_dir):
-        os.makedirs(chapter_dir)
 
-    for i, image in enumerate(tqdm(images, desc=f"Downloading Chapter {chapter_no}")):
-        image_url = f"{base_url}/data/{chapter_hash}/{image}"
-        image_path = os.path.join(chapter_dir, f"{i + 1}.jpg")
-        img_response = requests.get(image_url)
-        with open(image_path, 'wb') as file:
-            file.write(img_response.content)
+    if not os.path.exists(manga_dir):
+        os.makedirs(manga_dir)
+
+    if chapter_title == "":
+        cbz_path = os.path.join(manga_dir, f"Ch.{chapter_no}.cbz")
+    else:
+        chapter_title = chapter_title.replace("/", "-")
+        chapter_title = f": {chapter_title}"
+        cbz_path = os.path.join(manga_dir,
+                                f"Ch.{chapter_no}{chapter_title}.cbz")
+
+    with zipfile.ZipFile(cbz_path, 'w') as cbz:
+        for i, image in enumerate(
+                tqdm(images, desc=f"Downloading Chapter {chapter_no}")):
+            image_url = f"{base_url}/data/{chapter_hash}/{image}"
+            response = requests.get(image_url, stream=True)
+            image_name = f"{i + 1:04}.jpg"  # Zero-padded filenames for correct sorting
+            cbz.writestr(image_name, response.content)
 
 
 @sleep_and_retry
@@ -165,27 +178,34 @@ def download_multiple_chapter(chapter_id):
     for relation in chapter_data['relationships']:
         if relation['type'] == 'manga':
             manga_id = relation['id']
-            manga_data = requests.get(f"https://api.mangadex.org/manga/{manga_id}").json()['data']
-            manga_title = manga_data['attributes']['title'].get('en', manga_title)
+            manga_data = requests.get(
+                f"https://api.mangadex.org/manga/{manga_id}").json()['data']
+            manga_title = manga_data['attributes']['title'].get(
+                'en', manga_title)
             break
 
-
+    # Config and CBZ output path
     config_dir = config.get("settings", "path", fallback="~/Downloads/Manga")
     base_dir = os.path.expanduser(config_dir)
     manga_dir = os.path.join(base_dir, manga_title)
-    if chapter_title == None:
-        chapter_dir = os.path.join(manga_dir, f"Ch. {chapter_no}")
-    else:
-        chapter_dir = os.path.join(manga_dir, f"Ch. {chapter_no}: {chapter_title}")
-    if not os.path.exists(chapter_dir):
-        os.makedirs(chapter_dir)
 
-    for i, image in enumerate(images):
-        image_url = f"{base_url}/data/{chapter_hash}/{image}"
-        image_path = os.path.join(chapter_dir, f"{i + 1}.jpg")
-        img_response = requests.get(image_url)
-        with open(image_path, 'wb') as file:
-            file.write(img_response.content)
+    if not os.path.exists(manga_dir):
+        os.makedirs(manga_dir)
+
+    if chapter_title == "":
+        cbz_path = os.path.join(manga_dir, f"Ch.{chapter_no}.cbz")
+    else:
+        chapter_title = chapter_title.replace("/", "-")
+        chapter_title = f": {chapter_title}"
+        cbz_path = os.path.join(manga_dir,
+                                f"Ch.{chapter_no}{chapter_title}.cbz")
+
+    with zipfile.ZipFile(cbz_path, 'w') as cbz:
+        for i, image in enumerate(images):
+            image_url = f"{base_url}/data/{chapter_hash}/{image}"
+            response = requests.get(image_url, stream=True)
+            image_name = f"{i + 1:04}.jpg"  # Zero-padded filenames for correct sorting
+            cbz.writestr(image_name, response.content)
 
 
 def download_all_chapters(manga_id):
@@ -193,19 +213,21 @@ def download_all_chapters(manga_id):
     for chapter in (tqdm(all_chapters, desc="Downloading Chapter(s)")):
         download_multiple_chapter(chapter['id'])
 
+
 def download_specific_chapters(manga_id, chapter_numbers):
     all_chapters = get_all_chapters(manga_id)
     for chapter in all_chapters:
-        if chapter['attributes']['chapter'] in chapter_numbers and chapter['attributes']['translatedLanguage'] == 'en':
+        if chapter['attributes']['chapter'] in chapter_numbers and chapter[
+                'attributes']['translatedLanguage'] == 'en':
             download_single_chapter(chapter['id'])
-
-
 
 
 def download_specific_range(manga_id):
     # Prompt the user to enter start and end chapter numbers
-    start_chapter = inquirer.text(message="Enter the starting chapter number:").execute()
-    end_chapter = inquirer.text(message="Enter the ending chapter number:").execute()
+    start_chapter = inquirer.text(
+        message="Enter the starting chapter number:").execute()
+    end_chapter = inquirer.text(
+        message="Enter the ending chapter number:").execute()
 
     # Convert input to float to handle decimal chapter numbers correctly
     start_chapter_num = float(start_chapter)
@@ -216,9 +238,10 @@ def download_specific_range(manga_id):
 
     # Filter chapters that fall within the specified range
     chapters_in_range = [
-        chap for chap in chapters
-        if chap['attributes']['chapter'] is not None  # Ensure the chapter number exists
-        and start_chapter_num <= float(chap['attributes']['chapter']) <= end_chapter_num
+        chap for chap in chapters if chap['attributes']['chapter'] is
+        not None  # Ensure the chapter number exists
+        and start_chapter_num <= float(chap['attributes']
+                                       ['chapter']) <= end_chapter_num
     ]
 
     # Download each chapter in the range
@@ -234,21 +257,28 @@ def list_available_chapters(manga_id):
     # Extract the chapter number and title from the chapter data, and store both ID and chapter number
     chapter_choices = [
         {
-            "name": f"Ch. {chap['attributes']['chapter']}: {chap['attributes']['title']}",
+            "name":
+            f"Ch. {chap['attributes']['chapter']}: {chap['attributes']['title']}",
             "value": chap['id'],
-            "chapter_number": chap['attributes']['chapter']  # Add chapter number for easier tracking
-        }
-        for chap in chapters
+            "chapter_number": chap['attributes'][
+                'chapter']  # Add chapter number for easier tracking
+        } for chap in chapters
     ]
 
     selected_chapters = []
 
     while True:
         # Ensure that each iteration starts with a fresh list of options
-        choices_to_display = [chap for chap in chapter_choices if chap['value'] not in selected_chapters]
+        choices_to_display = [
+            chap for chap in chapter_choices
+            if chap['value'] not in selected_chapters
+        ]
 
         # Add "Go Back" and "Continue" options at the top of the list
-        choices_to_display.insert(0, {'name': 'Continue to download selected chapters', 'value': 'continue'})
+        choices_to_display.insert(0, {
+            'name': 'Continue to download selected chapters',
+            'value': 'continue'
+        })
         choices_to_display.insert(0, {'name': 'Go Back', 'value': 'go_back'})
 
         prompt = FuzzyPrompt(
@@ -264,7 +294,9 @@ def list_available_chapters(manga_id):
                 print("Continuing to download...")
                 break
             else:
-                print("No chapters selected! Please select some chapters before continuing.")
+                print(
+                    "No chapters selected! Please select some chapters before continuing."
+                )
                 continue
 
         # If the user selects "Go Back"
@@ -279,25 +311,26 @@ def list_available_chapters(manga_id):
     for chapter_id in selected_chapters:
         download_single_chapter(chapter_id)
 
+
 def display_selected_chapters(selected_chapters, chapter_choices):
     """Display the selected chapters by their chapter numbers instead of their IDs."""
     selected_numbers = [
-        next((chap['chapter_number'] for chap in chapter_choices if chap['value'] == chapter_id), chapter_id)
-        for chapter_id in selected_chapters
+        next((chap['chapter_number']
+              for chap in chapter_choices if chap['value'] == chapter_id),
+             chapter_id) for chapter_id in selected_chapters
     ]
     print(f"Selected chapters so far: {selected_numbers}")
+
 
 def handle_download_options(manga_id):
     while True:
         options = inquirer.select(
             message="Select download option:",
             choices=[
-                "Download All Chapters",
-                "Download Range of Chapters",
-                "Download Selected Chapters",
-                "Go Back"
+                "Download All Chapters", "Download Range of Chapters",
+                "Download Selected Chapters", "Go Back"
             ],
-            vi_mode=True, 
+            vi_mode=True,
         ).execute()
 
         if options == "Download All Chapters":
