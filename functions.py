@@ -120,13 +120,47 @@ def get_all_chapters(manga_id):
     return all_chapters
 
 
+def get_cover_url(manga_id):
+    """
+    Fetch the cover art URL for a given manga ID.
+
+    Args:
+        manga_id (str): The ID of the manga.
+
+    Returns:
+        str: The URL of the cover image, or None if not found.
+    """
+
+    # Fetch manga data with cover_art included
+    manga_url = f"https://api.mangadex.org/manga/{manga_id}?includes[]=cover_art"
+    response = requests.get(manga_url)
+    response.raise_for_status()
+    manga_data = response.json()['data']
+
+    # Extract cover art information
+    cover_url = None
+    for relation in manga_data['relationships']:
+        if relation.get('type') == 'cover_art' and 'attributes' in relation:
+            file_name = relation['attributes'].get('fileName')
+            if file_name:
+                cover_url = f"https://uploads.mangadex.org/covers/{manga_id}/{file_name}"
+                break
+
+    if not cover_url:
+        print("No cover art found for this manga.")
+
+    return cover_url
+
+
 @sleep_and_retry
 @limits(calls=5, period=ONE_SECOND)
-def download_single_chapter(chapter_id):
+def download_single_chapter(chapter_id, manga_id):
     chapter_url = f"https://api.mangadex.org/chapter/{chapter_id}"
     chapter_data = requests.get(chapter_url).json()['data']
     chapter_no = chapter_data['attributes']['chapter']
     chapter_title = chapter_data['attributes']['title']
+
+    cover_url = get_cover_url(manga_id)
 
     at_home_url = f"https://api.mangadex.org/at-home/server/{chapter_id}"
     image_data = requests.get(at_home_url).json()
@@ -161,6 +195,12 @@ def download_single_chapter(chapter_id):
                                 f"Ch.{chapter_no}{chapter_title}.cbz")
 
     with zipfile.ZipFile(cbz_path, 'w') as cbz:
+
+        if cover_url:
+            response = requests.get(cover_url, stream=True)
+            cbz.writestr("0000_cover.jpg",
+                         response.content)  # Ensures it's the first image
+
         for i, image in enumerate(
                 tqdm(images, desc=f"Downloading Chapter {chapter_no}")):
             image_url = f"{base_url}/data/{chapter_hash}/{image}"
@@ -171,11 +211,13 @@ def download_single_chapter(chapter_id):
 
 @sleep_and_retry
 @limits(calls=5, period=ONE_SECOND)
-def download_multiple_chapter(chapter_id):
+def download_multiple_chapter(chapter_id, manga_id):
     chapter_url = f"https://api.mangadex.org/chapter/{chapter_id}"
     chapter_data = requests.get(chapter_url).json()['data']
     chapter_no = chapter_data['attributes']['chapter']
     chapter_title = chapter_data['attributes']['title']
+
+    cover_url = get_cover_url(manga_id)
 
     at_home_url = f"https://api.mangadex.org/at-home/server/{chapter_id}"
     image_data = requests.get(at_home_url).json()
@@ -210,6 +252,12 @@ def download_multiple_chapter(chapter_id):
                                 f"Ch.{chapter_no}{chapter_title}.cbz")
 
     with zipfile.ZipFile(cbz_path, 'w') as cbz:
+
+        if cover_url:
+            response = requests.get(cover_url, stream=True)
+            cbz.writestr("0000_cover.jpg",
+                         response.content)  # Ensures it's the first image
+
         for i, image in enumerate(images):
             image_url = f"{base_url}/data/{chapter_hash}/{image}"
             response = requests.get(image_url, stream=True)
@@ -220,7 +268,7 @@ def download_multiple_chapter(chapter_id):
 def download_all_chapters(manga_id):
     all_chapters = get_all_chapters(manga_id)
     for chapter in (tqdm(all_chapters, desc="Downloading Chapter(s)")):
-        download_multiple_chapter(chapter['id'])
+        download_multiple_chapter(chapter['id'], manga_id)
 
 
 def download_specific_chapters(manga_id, chapter_numbers):
@@ -228,7 +276,7 @@ def download_specific_chapters(manga_id, chapter_numbers):
     for chapter in all_chapters:
         if chapter['attributes']['chapter'] in chapter_numbers and chapter[
                 'attributes']['translatedLanguage'] == 'en':
-            download_single_chapter(chapter['id'])
+            download_single_chapter(chapter['id'], manga_id)
 
 
 def download_specific_range(manga_id):
@@ -256,7 +304,7 @@ def download_specific_range(manga_id):
     # Download each chapter in the range
     for chap in chapters_in_range:
         # print(f"Downloading Chapter {chap['attributes']['chapter']} - {chap['attributes']['title']}")
-        download_single_chapter(chap['id'])
+        download_single_chapter(chap['id'], manga_id)
 
 
 def list_available_chapters(manga_id):
@@ -318,7 +366,7 @@ def list_available_chapters(manga_id):
         display_selected_chapters(selected_chapters, chapter_choices)
 
     for chapter_id in selected_chapters:
-        download_single_chapter(chapter_id)
+        download_single_chapter(chapter_id, manga_id)
 
 
 def display_selected_chapters(selected_chapters, chapter_choices):
