@@ -81,7 +81,7 @@ def get_all_chapters(manga_id):
     limit = 100
     offset = 0
     all_chapters = []
-    processed_chapter_ids = set()
+    processed_chapter_numbers = set()
 
     print("Processing Request")
     while True:
@@ -96,17 +96,26 @@ def get_all_chapters(manga_id):
 
         for chapter in chapters:
             chapter_id = chapter['id']
-            if chapter_id in processed_chapter_ids:
-                print(
-                    f"Duplicate chapter ID {chapter_id} detected and skipped.")
+            chapter_no = chapter['attributes'].get('chapter')
+
+            # Skip external chapters first
+            if chapter['attributes'].get('externalUrl'):
                 continue
-            processed_chapter_ids.add(chapter_id)
+
+            # Skip duplicates based on chapter number
+            if chapter_no in processed_chapter_numbers:
+                continue
+
+            # Add valid chapter
+            processed_chapter_numbers.add(chapter_no)
             all_chapters.append(chapter)
 
         offset += limit
 
+        # Break if less than the limit is returned (no more data)
         if len(chapters) < limit:
             break
+
     print("Request Accepted")
     return all_chapters
 
