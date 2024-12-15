@@ -12,6 +12,7 @@ from InquirerPy.prompts.fuzzy import FuzzyPrompt
 import click
 
 ONE_SECOND = 1
+NUM_CALLS = 3
 
 config = ConfigParser()
 config_file = os.path.expanduser("~/.config/mxcli/config.ini")
@@ -76,7 +77,7 @@ def download_chapter_range(manga_id):
 
 
 @sleep_and_retry
-@limits(calls=5, period=ONE_SECOND)
+@limits(calls=NUM_CALLS, period=ONE_SECOND)
 def get_all_chapters(manga_id):
     limit = 100
     offset = 0
@@ -120,6 +121,8 @@ def get_all_chapters(manga_id):
     return all_chapters
 
 
+@sleep_and_retry
+@limits(calls=NUM_CALLS, period=ONE_SECOND)
 def get_cover_url(manga_id):
     """
     Fetch the cover art URL for a given manga ID.
@@ -153,7 +156,7 @@ def get_cover_url(manga_id):
 
 
 @sleep_and_retry
-@limits(calls=5, period=ONE_SECOND)
+@limits(calls=NUM_CALLS, period=ONE_SECOND)
 def download_single_chapter(chapter_id, manga_id):
     chapter_url = f"https://api.mangadex.org/chapter/{chapter_id}"
     chapter_data = requests.get(chapter_url).json()['data']
@@ -210,7 +213,7 @@ def download_single_chapter(chapter_id, manga_id):
 
 
 @sleep_and_retry
-@limits(calls=5, period=ONE_SECOND)
+@limits(calls=NUM_CALLS, period=ONE_SECOND)
 def download_multiple_chapter(chapter_id, manga_id):
     chapter_url = f"https://api.mangadex.org/chapter/{chapter_id}"
     chapter_data = requests.get(chapter_url).json()['data']
@@ -265,12 +268,16 @@ def download_multiple_chapter(chapter_id, manga_id):
             cbz.writestr(image_name, response.content)
 
 
+@sleep_and_retry
+@limits(calls=NUM_CALLS, period=ONE_SECOND)
 def download_all_chapters(manga_id):
     all_chapters = get_all_chapters(manga_id)
     for chapter in (tqdm(all_chapters, desc="Downloading Chapter(s)")):
         download_multiple_chapter(chapter['id'], manga_id)
 
 
+@sleep_and_retry
+@limits(calls=NUM_CALLS, period=ONE_SECOND)
 def download_specific_chapters(manga_id, chapter_numbers):
     all_chapters = get_all_chapters(manga_id)
     for chapter in all_chapters:
@@ -279,6 +286,8 @@ def download_specific_chapters(manga_id, chapter_numbers):
             download_single_chapter(chapter['id'], manga_id)
 
 
+@sleep_and_retry
+@limits(calls=NUM_CALLS, period=ONE_SECOND)
 def download_specific_range(manga_id):
     # Prompt the user to enter start and end chapter numbers
     start_chapter = inquirer.text(
