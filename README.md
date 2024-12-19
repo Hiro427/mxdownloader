@@ -14,14 +14,13 @@ Mac: Error msg may appear during the download process but the download should go
 You will need to have python installed.
 
 
+<details>
+<summary>Manual Install</summary>  
 ### Clone repo: 
 
 #### Linux/MacOS
 
 `git clone https://github.com/Hiro427/mxdownloader.git /path/to/directory`
-
-#### Windows
-`git clone -b windows --single-branch https://github.com/Hiro427/mxdownloader.git` 
 
 #### Navigate to the project directory 
 
@@ -43,7 +42,9 @@ You will need to have python installed.
 
 `sudo mv ./mdx /usr/local/bin/` 
 
-#This should add it to your PATH if you are on MacOS or Linux allowing you to use the cli outside of the project folder. I am not sure how this is done for Windows. 
+#This should add it to your PATH if you are on MacOS or Linux allowing you to use the cli outside of the project folder. I am not sure how this is done for Windows.  
+</details>
+
 
 
 ## Main Menu 
