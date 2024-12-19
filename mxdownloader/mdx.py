@@ -1,6 +1,6 @@
-from cli_click import main as click_cli
-from cli_inq import main as inquirer_cli
-import sys 
+from .cli_click import main as click_cli
+from .cli_inq import main as inquirer_cli
+import sys
 
 
 def main():
@@ -9,7 +9,6 @@ def main():
     else:
         click_cli()
 
+
 if __name__ == "__main__":
     main()
-
-

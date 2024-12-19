@@ -1,6 +1,6 @@
 from InquirerPy import inquirer
 import clipboard
-from functions import handle_download_options, search_manga, extract_id_from_url
+from .functions import handle_download_options, search_manga, extract_id_from_url
 
 
 def main():

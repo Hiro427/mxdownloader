@@ -1,5 +1,5 @@
-import click 
-from functions import *
+import click
+from .functions import *
 
 
 @click.command()
@@ -19,9 +19,6 @@ def main(all, range, chapters):
         c = [num for num in chapter_input.split()]
         download_specific_chapters(url, c)
 
-    
-
 
 if __name__ == "__main__":
     main()
-

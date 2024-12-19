@@ -1,0 +1,1 @@
+from .mdx import main

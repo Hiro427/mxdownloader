@@ -1,9 +1,6 @@
-build/
-
-dist/ 
-
-mdx.spec 
-
+mxdownloader.egg-info/
 .venv/
-
+build/
+dist/
 __pycache__/
+
