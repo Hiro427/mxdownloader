@@ -10,6 +10,8 @@ Linux: Ok
 
 Mac: Error msg may appear during the download process but the download should go through regardless. This is on my list of things to work on going forward. 
 
+**As of 12/17/24**
+
 </details>
 
 # Installation 
@@ -22,7 +24,7 @@ Intall: `pip install mxdownloader`
 Run: `mdx` 
 
 
-View on Project [PyPi](https://pypi.org/project/mxdownloader/)
+View Project on [PyPi](https://pypi.org/project/mxdownloader/)
 
 <details>
 <summary>Manual Install</summary>  
