@@ -17,7 +17,9 @@ Mac: Error msg may appear during the download process but the download should go
 You will need to have [python](https://www.python.org/) installed. 
 
 
-`pip install mxdownloader` 
+Intall: `pip install mxdownloader` 
+
+Run: `mdx` 
 
 
 View on Project [PyPi](https://pypi.org/project/mxdownloader/)
