@@ -19,7 +19,7 @@ Mac: Error msg may appear during the download process but the download should go
 You will need to have [python](https://www.python.org/) installed. 
 
 
-Intall: `pip install mxdownloader` 
+Install: `pip install mxdownloader` 
 
 Run: `mdx` 
 
@@ -34,7 +34,7 @@ View Project on [PyPi](https://pypi.org/project/mxdownloader/)
 
 - #### Navigate to the project directory: `cd path/to/project` 
 
-- #### Install the requirements: `pip or pip3 install -r requirements.txt`
+- #### Install the requirements: `pip/pip3 install -r requirements.txt`
 
 - #### Run: cd into mxdownloader/mxdownloader: `python/python3 -m mxdownloader.mdx` 
 </details>
@@ -110,7 +110,7 @@ The location of the config file is hard coded by default to be ~/config/mxcli/co
 **Scanlation Groups**: https://www.reddit.com/r/mangadex/comments/mafhtl/scanlation_sites_megathread/
 
 
-_I couldn't find a reliable way to get all of the scanlation groups, since this program allows downloading any chapter(s) I wanted to give credit to as many groups as possible._
+_I couldn't find a reliable way to get all of the scanlation groups, since this program allows downloading any chapter(s), I wanted to give credit to as many groups as possible._
 
 **_If a group's name is not in this thread or would like me to post there links in the readme or in the wiki (not active atm, but I would make it for this) more directly please let me know via the Issues section._**
 
