@@ -3,4 +3,5 @@ mxdownloader.egg-info/
 build/
 dist/
 __pycache__/
+mdx.spec
 
